@@ -6,6 +6,8 @@ class Graph(object):
 
         def __init__(self, nodes):
                 self.nodes = nodes
+                self.first = True
+
 
 
         def addSuccTo(self, thisNode, addedSuccessor):
@@ -43,14 +45,22 @@ class Graph(object):
 
         def shortestPath(self, start, end, path=[]):
                 """Return list of nodes, included begin and end node. This list is the shortest path founded in graph"""
+                if len(path) == 0:
+                        self.marked = {}
+                        for key in self.nodes.iterkeys():
+                                self.marked[key] = False
                 path = path + [start]
+                                
                 if start == end:
                         return path
+                if self.first:
+                        self.first = False
                 if not self.nodes.has_key(start):
                         return None
                 shortest = None
                 for node in self.nodes[start]:
-                        if node not in path:
+                        if node not in path and not self.marked[node]:
+                                self.marked[node] = True
                                 newpath = self.shortestPath(node, end, path)
                                 if newpath != None:
                                         if shortest == None or len(newpath) < len(shortest):

@@ -1,6 +1,7 @@
 from graph import Graph
 from random import choice
 from game import Game
+import game
 from bot import Bot 
 
 
@@ -28,7 +29,7 @@ class JackyBot(Bot):
         if self.firstMove:
             self.creatGraph(self.game)
             self.firstMove = False
-            print self.graph # DEBUG
+            #print self.graph # DEBUG
             self.hero = self.game.getHeroNamed(BOT_JACKY_NAME)
         #directions = ['Stay', 'North', 'South', 'East', 'West']
         # CHOOSE A DIRECTION
@@ -39,33 +40,45 @@ class JackyBot(Bot):
                 path = self.graph.shortestPath(self.hero.pos, key)
                 if path == None:
                     # No path founded !
+                    print 'move: No path founded'
                     return 'Stay'
                 if len(finalPath) == 0 or len(path) < len(finalPath) :
                     finalPath = path
-        # Go to this direction
-        direction = (finalPath(0)-self.loc(0), finalPath(1)-self.loc(1))
+        # Get direction of 2nd node in finalPath (2nd node = adjacent neighbor)
+        direction = self.directionOf(finalPath[1]) 
         # RETURN
         return direction
 
+    def directionOf(self, neighbor):
+        """Return direction of move for go in targeted neighbors"""
+        x, y = neighbor
+        x = x - self.hero.pos[0]
+        y = y - self.hero.pos[1]
+        direction = game.AIMreversed[(x,y)]
+        print direction
+        return direction
 
     def creatGraph(self, game):
         """Creation of graph of map. Use of Game class
         Initialization of self.graph."""
         self.graph = Graph({}) # graph of map
         
-        # For each tile (not next to the border of world)
-        for row in range(1, len(self.game.board.tiles)-1):
-            for col in range(1, len(self.game.board.tiles[row])-1):
+        # For each tile 
+        for row in range(len(self.game.board.tiles)):
+            for col in range(len(self.game.board.tiles[row])):
 
                 neighbors = []
+                #print "C: "+str((row, col)) # DEBUG
                 # for each neighbors
                 for coord in [(row-1, col), (row+1, col), (row, col+1), (row, col-1)]:
                     # add it only if passable 
-                    if self.game.board.passable(coord):
+                    if self.game.board.exist(coord) and self.game.board.notAWall(coord):
+                        #print "\t"+str(coord) # DEBUG
                         neighbors.append(coord)
 
                 # add neighbors as successors
                 self.graph.addSuccTo((row, col), neighbors)
+        print self.graph
 
 
 

@@ -14,6 +14,11 @@ AIM = {'North': (-1, 0),
        'South': (1, 0),
        'West': (0, -1)}
 
+AIMreversed = {}
+for key, val in AIM.iteritems():
+    AIMreversed[val] = key
+
+
 class HeroTile:
     def __init__(self, id):
         self.id = id
@@ -81,6 +86,12 @@ class Board:
         x, y = loc
         pos = self.tiles[x][y]
         return (pos != WALL) and (pos != TAVERN) and not isinstance(pos, MineTile)
+
+    def notAWall(self, loc):
+        """Return true if loc is not a wall"""
+        x, y = loc
+        pos = self.tiles[x][y]
+        return (pos != WALL) 
 
     def exist(self, loc):
         'true if location exist in board, ie x and y are contain in (0, self.size-1)'
