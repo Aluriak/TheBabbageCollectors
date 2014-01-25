@@ -91,11 +91,14 @@ class Board:
         """Return true if loc is not a wall"""
         x, y = loc
         pos = self.tiles[x][y]
-        return (pos != WALL) 
+        return pos != WALL
 
     def exist(self, loc):
-        'true if location exist in board, ie x and y are contain in (0, self.size-1)'
+        'true if location exist in board, i.e. x and y are contain in (0, self.size-1)'
         x, y = loc
+        #print "DEBUG:"
+        #print loc
+        #print x >= 0 and x < self.size and y >= 0 and y < self.size
         return x >= 0 and x < self.size and y >= 0 and y < self.size
 
     def to(self, loc, direction):
