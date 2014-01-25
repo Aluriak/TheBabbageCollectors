@@ -15,9 +15,7 @@ AIM = {'North': (-1, 0),
        'South': (1, 0),
        'West': (0, -1)}
 
-AIMreversed = {}
-for key, val in AIM.iteritems():
-    AIMreversed[val] = key
+AIMreversed = {v:k for k, v in AIM.items()}
 
 
 class HeroTile:
@@ -52,9 +50,6 @@ class Game:
                 return hero
         return None
 
-    def getLocationofHero(self, idHero): #TODO
-        """Return tuple (x,y) location of hero with given id"""
-        return (-1,-1)
 
 
 class Board:
