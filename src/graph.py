@@ -1,5 +1,9 @@
+# -*- encoding: utf-8 -*-
 from queue import Queue
+import pickle
 
+# poids d'une arrête
+DISTANCE_BETWEEN_2_NODE = 1
 
 
 class Graph(object):
@@ -44,36 +48,153 @@ class Graph(object):
 
 
 
-    def shortestPath(self, start, end, path=[]):
-        """Return list of nodes, included begin and end node. This list is the shortest path founded in graph"""
-        # if its the first recursive call, creat a marked dict
-        if len(path) == 0:
-            self.marked = {}
-            for key in self.nodes.iterkeys():
-                self.marked[key] = False
-        path = path + [start]
+    #def shortestPath(self, start, end, path=[]):
+        #"""Return list of nodes, included begin and end node. This list is the shortest path founded in graph"""
+        ## if its the first recursive call, creat a marked dict
+        #if len(path) == 0:
+            #self.marked = {}
+            #for key in self.nodes.iterkeys():
+                #self.marked[key] = False
+        #path = path + [start]
                             
-        if start == end:
-            return path
-        if self.first:
-            self.first = False
-        if not self.nodes.has_key(start):
-            return None
-        shortest = None
-        for node in self.nodes[start]:
-            if node not in path and not self.marked[node]:
-                self.marked[node] = True
-                newpath = self.shortestPath(node, end, path)
-                if newpath != None:
-                    if shortest == None or len(newpath) < len(shortest):
-                        shortest = newpath
-        return shortest
+        #if start == end:
+            #return path
+        #if self.first:
+            #self.first = False
+        #if not self.nodes.has_key(start):
+            #return None
+        #shortest = None
+        #for node in self.nodes[start]:
+            #if node not in path and not self.marked[node]:
+                #self.marked[node] = True
+                #newpath = self.shortestPath(node, end, path)
+                #if newpath != None:
+                    #if shortest == None or len(newpath) < len(shortest):
+                        #shortest = newpath
+        #return shortest
 
 
 
 
     def BFS(self, start, end, path=[]):
-        pass
+        """BFS algorithm"""
+        queue = Queue()
+
+
+#Fonction Dijkstra (firstNode, target)
+    def Dijkstra(self, start, end):
+        """Dijkstra. Return path to end"""
+        # PICKLE (for work offline with samples)
+        #fd = open("RECOVERY_GRAPH", "w")
+        #pickle.dump(self.nodes, fd)
+        #fd.close()
+
+
+        # Pour n parcourant noeuds
+        # for each node of graph
+        walked = {}
+        previous = {}
+        for key in self.nodes.iterkeys():
+            walked[key] = None # infinity
+            previous[key] = None
+            
+        #Fin pour
+        #début.parcouru = 0
+        #pasEncoreVu = noeuds
+        walked[start] = 0
+        notFoundYet = []
+        for key in self.nodes.iterkeys():
+            notFoundYet.append(key)
+
+        #Tant que pasEncoreVu != liste vide
+        #    n1 = minimum(pasEncoreVu)   // Le nœud dans pasEncoreVu avec parcouru le plus petit
+        while len(notFoundYet) > 0:
+            minimalNode = self.nodeAtMinimumDistance(notFoundYet, walked)
+            #print "MINIMAL NODE POPPED: "+str(minimalNode)
+        
+            if minimalNode == None:
+                print "\n\n======ASSERT\n"
+                print "notFoundYet = "+str(notFoundYet)+"\n"
+                print "\n",
+                print "start = "+str(start)
+                print "end = "+str(end)
+                print "\n",
+                for node in notFoundYet:
+                    print str(node)+": "+str(walked[node])
+                print "\n",
+                print "walked = "+str(walked)+"\n"
+                print "previous = "+str(previous)+"\n"
+                print "\n\n======ASSERT\n\n"
+                exit(1)
+            # pasEncoreVu.enlever(n1)
+            # delete minimal from notFoundYet
+            tmp = []
+            for node in notFoundYet:
+                if node != minimalNode: tmp.append(node)
+            notFoundYet = tmp
+
+            # Pour n2 parcourant fils(n1)   // Les nœuds reliés à n1 par un arc
+            #     Si n2.parcouru > n1.parcouru + distance(n1, n2)   // distance correspond au poids de l'arc reliant n1 et n2
+            #         n2.parcouru = n1.parcouru + distance(n1, n2)
+            #         n2.précédent = n1   // Dit que pour aller à n2, il faut passer par n1
+            #     Fin si
+            # Fin pour
+            # for each successor of minimal
+            for successor in self.nodes[minimalNode]:
+                distance = self.distanceBetween(successor, minimalNode)
+                walkToSucc = walked[successor]
+                walkToNode = walked[minimalNode]
+                if walkToSucc == None    or    (walkToSucc > (walkToNode + distance)):
+                    walked[successor] = walkToNode + distance
+                    previous[successor] = minimalNode
+
+        # Here, all nodes are founded
+            
+
+
+        #Fin tant que
+        #chemin = liste vide
+        #n = fin
+        #Tant que n != début
+        path = []
+        target = end
+        while target != start:
+            # chemin.ajouterAvant(n)
+            # n = n.précédent
+            path = [target] + path
+            target = previous[target]
+
+        #Fin tant que
+        #chemin.ajouterAvant(début)
+        path = [start] + path
+        #Retourner chemin
+        return path
+    # END Dijkstra
+
+
+    def nodeAtMinimumDistance(self, notFoundYet, distances):
+        """Wait for non-empty list of tuple (x,y), keys of distances dictionnary.
+        Return the key with the minimum positive value"""
+        # found minimal
+        minimal = None
+        for node in notFoundYet:
+            if distances[node] != None: 
+                if minimal == None or (distances[minimal] > distances[node]):
+                        minimal = node
+
+        # return
+        return minimal
+
+
+
+    def distanceBetween(self, node1, node2):
+        return DISTANCE_BETWEEN_2_NODE
+
+
+
+
+
+
 
 
 
