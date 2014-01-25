@@ -8,18 +8,21 @@ class Graph(object):
                 self.nodes = nodes
 
 
-        def addSuccTo(self, thisNode, successor):
-                """Add given successor to given node"""
+        def addSuccTo(self, thisNode, addedSuccessor):
+                """Add given successor to given node. Successor must be a list"""
+                # add addedSuccessor to node addedSuccessors
                 if self.nodes.get(thisNode) != None:
-                        self.nodes[thisNode].append(successor)
+                        self.nodes[thisNode] += addedSuccessor
                 else:
-                        self.nodes[thisNode] = [successor]
+                        self.nodes[thisNode] = addedSuccessor
 
 
-        def retSuccOf(self, thisNode, successor):
-                """Delete successor of given node"""
+        def retSuccOf(self, thisNode, retiredSuccessor):
+                """Delete successor of given node. retiredSuccessor must be a list"""
                 if self.nodes.get(thisNode) != None:
-                        self.nodes[thisNode] = [x for x in self.nodes[thisNode] if x != successor]
+                        # reconstruct the list without content 
+                        # of retiredSuccessor
+                        self.nodes[thisNode] = [x for x in self.nodes[thisNode] if x not in retiredSuccessor]
                 else:
                         pass # nothing to do
 
@@ -28,7 +31,8 @@ class Graph(object):
         def __str__(self):
                 ret = ""
                 for node, succ in self.nodes.items():
-                        ret += str(node) + " (" + ", ".join(succ) + ")\n"
+                        ret += "("+str(node)+"): (" 
+                        ret += ", ".join([str(x) for x in succ]) + ")\n"
 
                 return ret
 

@@ -8,16 +8,15 @@ nodes = {
 
 g = Graph(nodes)
 
-g.addSuccTo('A', 'D')
-g.addSuccTo('D', 'B')
-g.retSuccOf('A', 'C')
-g.retSuccOf('A', 'E')
-g.retSuccOf('B', 'E')
+g.addSuccTo('A', ['D', "tester"])
+g.addSuccTo('D', ['B'])
+g.retSuccOf('A', ['C', 'E'])
+g.retSuccOf('B', ['E'])
 
-g.addSuccTo('C', 'A')
-g.addSuccTo('E', 'C')
-g.addSuccTo('B', 'E')
-g.addSuccTo('A', 'B')
+g.addSuccTo('C', ['A'])
+g.addSuccTo('E', ['C'])
+g.addSuccTo('B', ['E'])
+g.addSuccTo('A', ['B'])
 print g 
 
 
@@ -31,4 +30,6 @@ for startNode in g.nodes.keys():
                 else:
                         print ", ".join( shortestPath )
         print ""
+
+
 
