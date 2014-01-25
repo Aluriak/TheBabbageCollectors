@@ -23,3 +23,14 @@ class SlowBot(Bot):
         dirs = ['Stay', 'North', 'South', 'East', 'West']
         time.sleep(2)
         return choice(dirs)
+
+
+class JackyBot(Bot):
+    """Our Bot !"""
+
+    def move(self, state):
+        """"""
+        directions = ['Stay', 'North', 'South', 'East', 'West']
+        direction = choice(directions)
+        return direction
+
