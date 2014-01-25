@@ -51,10 +51,10 @@ class JackyBot(Bot):
 
     def directionOf(self, neighbor):
         """Return direction of move for go in targeted neighbors"""
-        x, y = neighbor
-        x = x - self.hero.pos[0]
-        y = y - self.hero.pos[1]
-        direction = game.AIMreversed[(x,y)]
+        y, x = neighbor
+        x = x - self.hero.pos[1]
+        y = y - self.hero.pos[0]
+        direction = game.AIMreversed[(y,x)]
         print direction
         return direction
 
