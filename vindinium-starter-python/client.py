@@ -5,7 +5,7 @@ import os
 import sys
 import requests
 import re
-from bot import RandomBot, SlowBot
+from jacky import JackyBot
 
 TIMEOUT=15
 
@@ -93,5 +93,5 @@ if __name__ == "__main__":
             server_url = "http://vindinium.jousse.org"
 
         for i in range(number_of_games):
-            start(server_url, key, mode, number_of_turns, RandomBot())
+            start(server_url, key, mode, number_of_turns, JackyBot())
             print("\nGame finished: %d/%d" % (i+1, number_of_games))
