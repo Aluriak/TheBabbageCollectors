@@ -1,3 +1,4 @@
+from queue import Queue
 
 
 
@@ -45,6 +46,7 @@ class Graph(object):
 
         def shortestPath(self, start, end, path=[]):
                 """Return list of nodes, included begin and end node. This list is the shortest path founded in graph"""
+                # if its the first recursive call, creat a marked dict
                 if len(path) == 0:
                         self.marked = {}
                         for key in self.nodes.iterkeys():
@@ -66,4 +68,7 @@ class Graph(object):
                                         if shortest == None or len(newpath) < len(shortest):
                                                 shortest = newpath
                 return shortest
+
+
+
 
