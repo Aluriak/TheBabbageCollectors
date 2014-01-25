@@ -3,3 +3,4 @@ vsp	client.py
 
 tabnew	game.py
 tabnew	jacky.py
+tabnew	graph.py
