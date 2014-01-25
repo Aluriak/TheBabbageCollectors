@@ -1,10 +1,12 @@
 *.pyc
 */*.pyc
 */*/*.pyc
+*/*/*/*.pyc
 *.swp
 */*.swp
 */*/*.swp
+*/*/*/*.swp
 *.swo
 */*.swo
-*/*/*.swo
+*/*/*/*.swo
 keyForSubject
