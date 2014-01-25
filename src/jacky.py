@@ -35,13 +35,16 @@ class JackyBot(Bot):
         # CHOOSE A DIRECTION
         finalPath = []
         path = []
+        # for each mine
         for key in self.game.mines_locs.iterkeys():
+            # if mine is not Jacky's mine
             if self.game.mines_locs[key] != self.hero.id:
                 path = self.graph.shortestPath(self.hero.pos, key)
                 if path == None:
                     # No path founded !
                     print 'move: No path founded'
                     return 'Stay'
+                print path
                 if len(finalPath) == 0 or len(path) < len(finalPath) :
                     finalPath = path
         # Get direction of 2nd node in finalPath (2nd node = adjacent neighbor)
