@@ -51,7 +51,7 @@ class Game:
                 return hero
         return None
 
-    def getLocationofHero(self, idHero):
+    def getLocationofHero(self, idHero): #TODO
         """Return tuple (x,y) location of hero with given id"""
         return (-1,-1)
 
@@ -88,7 +88,7 @@ class Board:
         return (pos != WALL) and (pos != TAVERN) and not isinstance(pos, MineTile)
 
     def notAWall(self, loc):
-        """Return true if loc is not a wall"""
+        """Return true if loc is a wall"""
         x, y = loc
         pos = self.tiles[x][y]
         return pos != WALL
@@ -96,9 +96,6 @@ class Board:
     def exist(self, loc):
         'true if location exist in board, i.e. x and y are contain in (0, self.size-1)'
         x, y = loc
-        #print "DEBUG:"
-        #print loc
-        #print x >= 0 and x < self.size and y >= 0 and y < self.size
         return x >= 0 and x < self.size and y >= 0 and y < self.size
 
     def to(self, loc, direction):
@@ -123,4 +120,7 @@ class Hero:
         self.life = hero['life']
         self.gold = hero['gold']
         self.id = hero['id']
+
+
+
 
