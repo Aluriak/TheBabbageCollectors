@@ -45,7 +45,7 @@ class JackyBot(Bot):
                 if len(finalPath) == 0 or len(path) < len(finalPath) :
                     finalPath = path
         # Get direction of 2nd node in finalPath (2nd node = adjacent neighbor)
-        direction = self.directionOf(finalPath[1]) 
+        direction = self.directionOf(finalPath[0]) 
         # RETURN
         return direction
 
