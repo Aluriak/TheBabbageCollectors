@@ -30,7 +30,14 @@ class JackyBot(Bot):
             print self.graph # DEBUG
         directions = ['Stay', 'North', 'South', 'East', 'West']
         # CHOOSE A DIRECTION
-        direction = choice(directions)
+        finalPath = {}
+        for key in self.game.mines_locs.iterkeys():
+            if self.game.mines_locs[key] != self.id:
+                path = shortestPath(self, self.loc, key, path)
+                if finalPath.isEmpty() or path.lentgh() < finalPath.length() :
+                    finalPath = path
+        # Go to this direction
+        direction = (finalPath(0)-self.loc(0), finalPath(1)-self.loc(1))
         # RETURN
         return direction
 
