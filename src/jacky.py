@@ -35,7 +35,7 @@ class JackyBot(Bot):
                 path = shortestPath(self, self.loc, key, path)
                 if finalPath.isEmpty() or path.lentgh() < finalPath.length() :
                     finalPath = path
-        # Go to tihs direction
+        # Go to this direction
         direction = (finalPath(0)-self.loc(0), finalPath(1)-self.loc(1))
         # RETURN
         return direction
