@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 from random import choice
 import time
 

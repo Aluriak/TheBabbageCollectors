@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 from graph import Graph
 from random import choice
 from game import Game
@@ -113,3 +114,7 @@ class JackyBot(Bot):
         if self.hero.life < 50 and node in self.game.taverns_locs:
             return -25
         return 1
+
+
+
+
