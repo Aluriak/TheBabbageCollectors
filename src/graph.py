@@ -2,16 +2,17 @@
 from queue import Queue
 import pickle
 
-# poids d'une arrête
-DISTANCE_BETWEEN_2_NODE = 1
+# weight of a edge
+DISTANCE_BETWEEN_2_NODES = 1
 
 
 class Graph(object):
     """Basic implementation of graph."""
 
-    def __init__(self, nodes):
+    def __init__(self, nodes, distanceBetweenTwoNodes = DISTANCE_BETWEEN_2_NODES):
         self.nodes = nodes
         self.first = True
+        self.distanceBetweenTwoNodes = distanceBetweenTwoNodes
 
 
 
@@ -188,7 +189,7 @@ class Graph(object):
 
 
     def distanceBetween(self, node1, node2):
-        return DISTANCE_BETWEEN_2_NODE
+        return self.distanceBetweenTwoNodes
 
 
 
