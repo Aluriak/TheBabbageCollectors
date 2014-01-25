@@ -1,35 +1,44 @@
 from graph import Graph
 
-nodes = {
-        'A' : ['B', 'E'],
-        'B' : ['A'],
-}
+#nodes = {
+    #'A' : ['B', 'E'],
+    #'B' : ['A', 'F', 'C', 'D'],
+    #'C' : ['B', 'H'],
+    #'D' : ['B', 'G'],
+    #'E' : ['A', 'F'],
+    #'F' : ['E', 'B', 'G'],
+    #'G' : ['F', 'D', 'H'],
+    #'H' : ['C', 'G'],
+#}
 
 
-g = Graph(nodes)
+#g = Graph(nodes)
 
-g.addSuccTo('A', ['D', "tester"])
-g.addSuccTo('D', ['B'])
-g.retSuccOf('A', ['C', 'E'])
-g.retSuccOf('B', ['E'])
-
-g.addSuccTo('C', ['A'])
-g.addSuccTo('E', ['C'])
-g.addSuccTo('B', ['E'])
-g.addSuccTo('A', ['B'])
-print g 
+#print g 
 
 
 
-for startNode in g.nodes.keys():
-        for endNode in g.nodes.keys():
-                shortestPath = g.shortestPath(startNode,endNode)
-                print startNode+"to"+endNode+": ",
-                if shortestPath == None: 
-                        print "No way !"
-                else:
-                        print ", ".join( shortestPath )
-        print ""
+#for startNode in g.nodes.keys():
+    #for endNode in g.nodes.keys():
+        #shortestPath = g.Dijkstra(startNode,endNode)
+        #print startNode+"to"+endNode+": ",
+        #if len(shortestPath) == 0: 
+            #print "No way !"
+        #else:
+            #print ", ".join( shortestPath )
+    #print "END"
 
+notFoundYet = [0,3,5,8,3,6,10,-1]
 
+minimal = None
+for node in notFoundYet:
+    print node
+    if (node >= 0): 
+        if minimal == None or (minimal > node):
+                minimal = node
 
+# return
+if minimal == None:     
+    print "No minimal"
+else:
+    print "Minimal is "+str(minimal)
