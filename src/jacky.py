@@ -4,7 +4,7 @@ from game import Game
 from bot import Bot 
 
 
-
+BOT_JACKY_NAME = 'Jacky'
 SCORE_BASE = 10
 SCORE_MINE = -10
 SCORE_DISTANCE = 1
@@ -19,6 +19,7 @@ class JackyBot(Bot):
         """Jacky is creat !"""
         self.firstMove = True
         self.game = None # creat by Game class
+        self.hero = None
 
     def move(self, state):
         """Call at each step of game. Must return a direction choose between ['Stay', 'North', 'South', 'East', 'West'] """
@@ -28,13 +29,18 @@ class JackyBot(Bot):
             self.creatGraph(self.game)
             self.firstMove = False
             print self.graph # DEBUG
-        directions = ['Stay', 'North', 'South', 'East', 'West']
+            self.hero = self.game.getHeroNamed(BOT_JACKY_NAME)
+        #directions = ['Stay', 'North', 'South', 'East', 'West']
         # CHOOSE A DIRECTION
-        finalPath = {}
+        finalPath = []
+        path = []
         for key in self.game.mines_locs.iterkeys():
-            if self.game.mines_locs[key] != self.id:
-                path = shortestPath(self, self.loc, key, path)
-                if finalPath.isEmpty() or path.lentgh() < finalPath.length() :
+            if self.game.mines_locs[key] != self.hero.id:
+                path = self.graph.shortestPath(self.hero.pos, key)
+                if path == None:
+                    # No path founded !
+                    return 'Stay'
+                if len(finalPath) == 0 or len(path) < len(finalPath) :
                     finalPath = path
         # Go to this direction
         direction = (finalPath(0)-self.loc(0), finalPath(1)-self.loc(1))

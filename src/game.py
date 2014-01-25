@@ -40,6 +40,15 @@ class Game:
                 elif (obj == TAVERN):
                     self.taverns_locs.add((row, col))
 
+    def getHeroNamed(self, name):
+        for hero in self.heroes:
+            if hero.name == name: 
+                return hero
+        return None
+
+    def getLocationofHero(self, idHero):
+        """Return tuple (x,y) location of hero with given id"""
+        return (-1,-1)
 
 
 class Board:
@@ -96,7 +105,8 @@ class Board:
 class Hero:
     def __init__(self, hero):
         self.name = hero['name']
-        self.pos = hero['pos']
+        self.pos = (hero['pos']['x'], hero['pos']['y'])
         self.life = hero['life']
         self.gold = hero['gold']
+        self.id = hero['id']
 
