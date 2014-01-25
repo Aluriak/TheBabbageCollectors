@@ -73,6 +73,11 @@ class Board:
         pos = self.tiles[x][y]
         return (pos != WALL) and (pos != TAVERN) and not isinstance(pos, MineTile)
 
+    def exist(self, loc):
+        'true if location exist in board, ie x and y are contain in (0, self.size-1)'
+        x, y = loc
+        return x >= 0 and x < self.size and y >= 0 and y < self.size
+
     def to(self, loc, direction):
         'calculate a new location given the direction'
         row, col = loc
