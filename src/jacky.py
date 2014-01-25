@@ -27,6 +27,7 @@ class JackyBot(Bot):
         if self.firstMove:
             self.creatGraph(self.game)
             self.firstMove = False
+            print self.graph # DEBUG
         directions = ['Stay', 'North', 'South', 'East', 'West']
         # CHOOSE A DIRECTION
         direction = choice(directions)
@@ -39,6 +40,19 @@ class JackyBot(Bot):
         Initialization of self.graph."""
         self.graph = Graph({}) # graph of map
         
+        # For each tile (not next to the border of world)
+        for row in range(1, len(self.game.board.tiles)-1):
+            for col in range(1, len(self.game.board.tiles[row])-1):
+
+                neighbors = []
+                # for each neighbors
+                for coord in [(row-1, col), (row+1, col), (row, col+1), (row, col-1)]:
+                    # add it only if passable 
+                    if self.game.board.passable(coord):
+                        neighbors.append(coord)
+
+                # add neighbors as successors
+                self.graph.addSuccTo((row, col), neighbors)
 
 
 
