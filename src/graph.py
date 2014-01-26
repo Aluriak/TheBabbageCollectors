@@ -47,8 +47,9 @@ class Graph(object):
 
 
 #Fonction Dijkstra (firstNode, target)
-    def Dijkstra(self, start, end):
-        """Dijkstra. Return path to end"""
+    def Dijkstra(self, start, ends):
+        """Dijkstra. Return a list of duet.
+        Each duet is (path, evaluation) for a end node in ends argument"""
         # PICKLE (for work offline with samples)
         #fd = open("RECOVERY_GRAPH", "w")
         #pickle.dump(self.nodes, fd)
@@ -114,34 +115,38 @@ class Graph(object):
             
 
 
-        #Fin tant que
-        #chemin = liste vide
-        #n = fin
-        #Tant que n != début
-        path = []
-        target = end
-        while target != start:
-            # chemin.ajouterAvant(n)
-            # n = n.précédent
-            path = [target] + path
-            target = previous[target]
+        results = []
+        # for each end node
+        for end in ends:
+            #Fin tant que
+            #chemin = liste vide
+            #n = fin
+            #Tant que n != début
+            path = []
+            target = end
+            while target != start:
+                # chemin.ajouterAvant(n)
+                # n = n.précédent
+                path = [target] + path
+                target = previous[target]
 
-        # DEBUG
-        if self.first:
-            #print "===================================="
-            #for node, dist in walked.iteritems():
-                #print str(node)+": "+str(dist)
-            #print "===================================="
-            self.first = False
+            # DEBUG
+            if self.first:
+                #print "===================================="
+                #for node, dist in walked.iteritems():
+                    #print str(node)+": "+str(dist)
+                #print "===================================="
+                self.first = False
 
-        #Fin tant que
-        #chemin.ajouterAvant(début)
-        #Retourner chemin
-        path = [start] + path
-        evaluation = walked[path[-1]]
-        #for node in path:
-            #evaluation += walked[node] + 1
-        return path, evaluation
+            #Fin tant que
+            #chemin.ajouterAvant(début)
+            #Retourner chemin
+            path = [start] + path
+            evaluation = walked[path[-1]]
+            results.append((path, evaluation))
+
+        # return
+        return results
     # END Dijkstra
 
 
