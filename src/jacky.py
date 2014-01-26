@@ -88,7 +88,9 @@ class JackyBot(Bot):
 
 
     def evalNode(self, node):
-        # Si une mine nous appartient elle n'est pas intéressante
+       """Function that evaluate nodes of the graph. Wait a node.
+       Set a value for the node, the best node is the node of lesser value."""
+       # Si une mine nous appartient elle n'est pas intéressante
         if isinstance(node, MineTile) and self.game.mines_locs[node] == self.hero.id:
             return 15
         # Si une mine ne nous appartient pas elle est intéressante
