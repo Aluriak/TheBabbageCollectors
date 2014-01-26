@@ -12,6 +12,13 @@ SCORE_MINE = -10
 SCORE_DISTANCE = 1
 
 
+INTEREST_BASE = 1
+INTEREST_LOWER = 25
+INTEREST_HIGHER = -25
+INTEREST_FEW_HIGH = -10
+INTEREST_LOW = 15
+INTEREST_HIGH = -15
+INTEREST_VERY_HIGH = -20
 
 
 
@@ -54,7 +61,7 @@ class JackyBot(Bot):
         return direction
 
     def directionOf(self, neighbor):
-        """Return direction of move for go in targeted neighbors"""
+        """Return direction of move to go to targeted neighbors"""
         yn, xn = neighbor
         yh, xh = self.hero.pos
         x = xn - xh
@@ -89,34 +96,35 @@ class JackyBot(Bot):
 
     def evalNode(self, node):
        """Function that evaluate nodes of the graph. Wait a node.
-       Set a value for the node, the best node is the node of lesser value."""
+       Seek if the node is a mine, a tavern, a hero or none. The more a node will give golds(or HP if in need), 
+       the more interest will be set as a return of the function."""
        # Si une mine nous appartient elle n'est pas intéressante
-        ponderation = 1
+        ponderation = INTEREST_BASE
         # Si une mine nous appartient elle n'est pas intéressante
         if isinstance(node, MineTile) and self.game.mines_locs[node] == self.hero.id:
-            ponderation = 15
+            ponderation = INTEREST_LOW
         # Si une mine ne nous appartient pas elle est intéressante
         if isinstance(node, MineTile) and self.game.mines_locs[node] != self.hero.id:
-            ponderation = -10
+            ponderation = INTEREST_FEW_HIGH
         # Si le hero est plus faible que nous il est intéressant suivant son nombre de mine
         if isinstance(node, HeroTile) and self.game.heroes_locs[node].life < self.hero.life:
             nbMines = 0
             for key in self.game.mines_locs.iterkeys():
                 if self.game.mines_locs[key] == self.game.heroes_locs[node]: nbMines += 1
-            if nbMines == 0: ponderation = 25
-            if nbMines == 1: ponderation = -10
-            if nbMines == 2: ponderation = -15
-            if nbMines == 3: ponderation = -20
-            if nbMines == 4: ponderation = -25
+            if nbMines == 0: ponderation = INTEREST_LOWER
+            if nbMines == 1: ponderation = INTEREST_FEW_HIGH
+            if nbMines == 2: ponderation = INTEREST_HIGH
+            if nbMines == 3: ponderation = INTEREST_VERY_HIGH
+            if nbMines == 4: ponderation = INTEREST_HIGHER
         # Si le hero est plus fort que nous c'est loin d'être une bonne idée d'aller lui dire bonjour
         if isinstance(node, HeroTile) and self.game.heroes_locs[node].life >= self.hero.life:
-            ponderation = 25
-        # Si nous ne sommes pas en péril la taverne n'est pas intéressant
+            ponderation = INTEREST_LOWER
+        # Si nous ne sommes pas en péril la taverne n'est pas intéressante
         if self.hero.life > 50 and node in self.game.taverns_locs:
-            ponderation = 25
+            ponderation = INTEREST_LOWER
         # Si nous sommes en péril la terverne prend des airs de paradis
         if self.hero.life < 50 and node in self.game.taverns_locs:
-            ponderation = -25
+            ponderation = INTEREST_HIGHER
         return ponderation
 
 

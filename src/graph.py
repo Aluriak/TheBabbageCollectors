@@ -189,7 +189,8 @@ class Graph(object):
 
 
     def distanceBetween(self, node1, node2):
-        return self.distanceBetweenTwoNodes
+       """Wait two nodes. Return the minimum distance between these two nodes"""
+       return self.distanceBetweenTwoNodes
 
 
 
