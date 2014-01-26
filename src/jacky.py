@@ -58,8 +58,8 @@ class JackyBot(Bot):
                         finalPath = path
 
         else:
-            for key in self.game.taverns_locs.iterkeys():
-                path = self.graph.Dijkstra(self, self.hero.pos, key)
+            for key in self.game.taverns_locs:
+                path = self.graph.Dijkstra(self.hero.pos, key)
                 if len(finalPath) == 0 or len(path) < len(finalPath):
                     finalPath = path
         # Get direction of 2nd node in finalPath (2nd node = adjacent neighbor)
@@ -90,12 +90,11 @@ class JackyBot(Bot):
                 if self.game.board.exist((row,col)) and self.game.board.notAWall((row,col)):
 
                     neighbors = []
-                    if self.game.board.passable((row,col)):
-                        # for each neighbors
-                        for coord in [(row-1, col), (row+1, col), (row, col+1), (row, col-1)]:
-                            # add it only if passable and valable in board
-                            if self.game.board.exist(coord) and  self.game.board.notAWall(coord):
-                                neighbors.append(coord)
+                    # for each neighbors
+                    for coord in [(row-1, col), (row+1, col), (row, col+1), (row, col-1)]:
+                        # add it only if passable and valable in board
+                        if self.game.board.exist(coord) and  self.game.board.notAWall(coord):
+                            neighbors.append(coord)
 
                     # add neighbors as successors
                     self.graph.addSuccTo((row, col), neighbors)
