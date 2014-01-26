@@ -12,7 +12,7 @@ SCORE_MINE = -10
 SCORE_DISTANCE = 1
 
 
-INTEREST_BASE = 1
+INTEREST_BASE = 25
 INTEREST_LOWER = 25
 INTEREST_HIGHER = -25
 INTEREST_FEW_HIGH = -10
@@ -102,29 +102,29 @@ class JackyBot(Bot):
         ponderation = INTEREST_BASE
         # Si une mine nous appartient elle n'est pas intéressante
         if isinstance(node, MineTile) and self.game.mines_locs[node] == self.hero.id:
-            ponderation = INTEREST_LOW
+            ponderation += INTEREST_LOW
         # Si une mine ne nous appartient pas elle est intéressante
         if isinstance(node, MineTile) and self.game.mines_locs[node] != self.hero.id:
-            ponderation = INTEREST_FEW_HIGH
+            ponderation += INTEREST_FEW_HIGH
         # Si le hero est plus faible que nous il est intéressant suivant son nombre de mine
         if isinstance(node, HeroTile) and self.game.heroes_locs[node].life < self.hero.life:
             nbMines = 0
             for key in self.game.mines_locs.iterkeys():
                 if self.game.mines_locs[key] == self.game.heroes_locs[node]: nbMines += 1
-            if nbMines == 0: ponderation = INTEREST_LOWER
-            if nbMines == 1: ponderation = INTEREST_FEW_HIGH
-            if nbMines == 2: ponderation = INTEREST_HIGH
-            if nbMines == 3: ponderation = INTEREST_VERY_HIGH
-            if nbMines == 4: ponderation = INTEREST_HIGHER
+            if nbMines == 0: ponderation += INTEREST_LOWER
+            if nbMines == 1: ponderation += INTEREST_FEW_HIGH
+            if nbMines == 2: ponderation += INTEREST_HIGH
+            if nbMines == 3: ponderation += INTEREST_VERY_HIGH
+            if nbMines == 4: ponderation += INTEREST_HIGHER
         # Si le hero est plus fort que nous c'est loin d'être une bonne idée d'aller lui dire bonjour
         if isinstance(node, HeroTile) and self.game.heroes_locs[node].life >= self.hero.life:
-            ponderation = INTEREST_LOWER
+            ponderation += INTEREST_LOWER
         # Si nous ne sommes pas en péril la taverne n'est pas intéressante
         if self.hero.life > 50 and node in self.game.taverns_locs:
-            ponderation = INTEREST_LOWER
+            ponderation += INTEREST_LOWER
         # Si nous sommes en péril la terverne prend des airs de paradis
         if self.hero.life < 50 and node in self.game.taverns_locs:
-            ponderation = INTEREST_HIGHER
+            ponderation += INTEREST_HIGHER
         return ponderation
 
 
