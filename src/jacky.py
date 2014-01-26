@@ -98,7 +98,7 @@ class JackyBot(Bot):
         if isinstance(node, HeroTile) and self.game.heroes_locs[node].life < self.hero.life:
             nbMines = 0
             for key in self.game.mines_locs.iterkeys():
-                if self.game.mines_locs[key] == self.game.heroes_locs[node]: nbMines += 1:
+                if self.game.mines_locs[key] == self.game.heroes_locs[node]: nbMines += 1
             if nbMibes == 0: return 25
             if nbMines == 1: return -10
             if nbMines == 2: return -15
