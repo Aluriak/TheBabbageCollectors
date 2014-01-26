@@ -102,7 +102,7 @@ class Graph(object):
             # Fin pour
             # for each successor of minimal
             for successor in self.nodes[minimalNode]:
-                distance = self.distanceBetween(successor, minimalNode)
+                distance = self.distanceBetween(minimalNode, successor)
                 walkToSucc = walked[successor]
                 walkToNode = walked[minimalNode]
                 if walkToSucc == None    or    (walkToSucc > (walkToNode + distance)):
@@ -129,6 +129,12 @@ class Graph(object):
         #chemin.ajouterAvant(début)
         path = [start] + path
         #Retourner chemin
+        if self.first:
+            print "===================================="
+            for node, dist in walked.iteritems():
+                print str(node)+": "+str(dist)
+            print "===================================="
+            self.first = False
         return path
     # END Dijkstra
 
