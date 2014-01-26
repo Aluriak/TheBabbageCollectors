@@ -117,6 +117,15 @@ class Hero:
         self.gold = hero['gold']
         self.id = hero['id']
 
+    def __str__(self):
+        """format: 
+        name (id)
+        position
+        life
+        gold"""
+        return "Hero "+self.name+" (id"+str(self.id)+")\nposition "+str(self.pos)+"\nLife: "+str(self.life)+"\nGold: "+str(self.gold)+"\n"
+
+
 
 
 
