@@ -88,32 +88,33 @@ class JackyBot(Bot):
 
 
     def evalNode(self, node):
+        ponderation = 1
         # Si une mine nous appartient elle n'est pas intéressante
         if isinstance(node, MineTile) and self.game.mines_locs[node] == self.hero.id:
-            return 15
+            ponderation = 15
         # Si une mine ne nous appartient pas elle est intéressante
         if isinstance(node, MineTile) and self.game.mines_locs[node] != self.hero.id:
-            return -10
+            ponderation = -10
         # Si le hero est plus faible que nous il est intéressant suivant son nombre de mine
         if isinstance(node, HeroTile) and self.game.heroes_locs[node].life < self.hero.life:
             nbMines = 0
             for key in self.game.mines_locs.iterkeys():
                 if self.game.mines_locs[key] == self.game.heroes_locs[node]: nbMines += 1
-            if nbMibes == 0: return 25
-            if nbMines == 1: return -10
-            if nbMines == 2: return -15
-            if nbMines == 3: return -20
-            if nbMines == 4: return -25
+            if nbMibes == 0: ponderation = 25
+            if nbMines == 1: ponderation = -10
+            if nbMines == 2: ponderation = -15
+            if nbMines == 3: ponderation = -20
+            if nbMines == 4: ponderation = -25
         # Si le hero est plus fort que nous c'est loin d'être une bonne idée d'aller lui dire bonjour
         if isinstance(node, HeroTile) and self.game.heroes_locs[node].life >= self.hero.life:
-            return 25
+            ponderation = 25
         # Si nous ne sommes pas en péril la taverne n'est pas intéressant
         if self.hero.life > 50 and node in self.game.taverns_locs:
-            return 25
+            ponderation = 25
         # Si nous sommes en péril la terverne prend des airs de paradis
         if self.hero.life < 50 and node in self.game.taverns_locs:
-            return -25
-        return 1
+            ponderation = -25
+        return ponderation
 
 
 
