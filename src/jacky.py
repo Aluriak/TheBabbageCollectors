@@ -13,12 +13,16 @@ SCORE_DISTANCE = 1
 
 
 INTEREST_BASE = 25
+INTEREST_MINE = -10
+NON_INTEREST_MINE = 500
 INTEREST_LOWER = 25
 INTEREST_HIGHER = -25
 INTEREST_FEW_HIGH = -10
-INTEREST_LOW = 15
 INTEREST_HIGH = -15
 INTEREST_VERY_HIGH = -20
+NON_INTEREST_HERO = 500
+INTEREST_INN = -25
+NON_INTEREST_INN = 500
 
 
 
@@ -107,10 +111,10 @@ class JackyBot(Bot):
         ponderation = INTEREST_BASE
         # Si une mine nous appartient elle n'est pas intéressante
         if isinstance(node, MineTile) and self.game.mines_locs[node] == self.hero.id:
-            ponderation += INTEREST_LOW
+            ponderation += NON_INTEREST_MINE
         # Si une mine ne nous appartient pas elle est intéressante
         if isinstance(node, MineTile) and self.game.mines_locs[node] != self.hero.id:
-            ponderation += INTEREST_FEW_HIGH
+            ponderation += INTEREST_MINE
         # Si le hero est plus faible que nous il est intéressant suivant son nombre de mine
         if isinstance(node, HeroTile) and self.game.heroes_locs[node].life < self.hero.life:
             nbMines = 0
@@ -123,13 +127,13 @@ class JackyBot(Bot):
             if nbMines == 4: ponderation += INTEREST_HIGHER
         # Si le hero est plus fort que nous c'est loin d'être une bonne idée d'aller lui dire bonjour
         if isinstance(node, HeroTile) and self.game.heroes_locs[node].life >= self.hero.life:
-            ponderation += INTEREST_LOWER
+            ponderation += NON_INTEREST_HERO
         # Si nous ne sommes pas en péril la taverne n'est pas intéressante
         if self.hero.life > 50 and node in self.game.taverns_locs:
-            ponderation += INTEREST_LOWER
+            ponderation += NON_INTEREST_INN
         # Si nous sommes en péril la terverne prend des airs de paradis
         if self.hero.life < 50 and node in self.game.taverns_locs:
-            ponderation += INTEREST_HIGHER
+            ponderation += INTEREST_INN
         return ponderation
 
 
