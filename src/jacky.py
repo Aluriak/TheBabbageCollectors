@@ -28,11 +28,10 @@ class JackyBot(Bot):
         """Call at each step of game. Must return a direction choose between ['Stay', 'North', 'South', 'East', 'West'] """
         # INIT
         self.game = Game(state)
+        self.hero = self.game.getHeroNamed(BOT_JACKY_NAME)
         if self.firstMove:
             self.creatGraph(self.game)
             self.firstMove = False
-            #print self.graph # DEBUG
-            self.hero = self.game.getHeroNamed(BOT_JACKY_NAME)
         #directions = ['Stay', 'North', 'South', 'East', 'West']
         # CHOOSE A DIRECTION
         finalPath = []
@@ -50,6 +49,7 @@ class JackyBot(Bot):
                     finalPath = path
         # Get direction of 2nd node in finalPath (2nd node = adjacent neighbor)
         direction = self.directionOf(finalPath[1]) 
+        print self.hero
         # RETURN
         return direction
 
@@ -75,11 +75,12 @@ class JackyBot(Bot):
                 if self.game.board.exist((row,col)) and self.game.board.notAWall((row,col)):
 
                     neighbors = []
-                    # for each neighbors
-                    for coord in [(row-1, col), (row+1, col), (row, col+1), (row, col-1)]:
-                        # add it only if passable and valable in board
-                        if self.game.board.exist(coord) and  self.game.board.notAWall(coord):
-                            neighbors.append(coord)
+                    if self.game.board.passable((row,col)):
+                        # for each neighbors
+                        for coord in [(row-1, col), (row+1, col), (row, col+1), (row, col-1)]:
+                            # add it only if passable and valable in board
+                            if self.game.board.exist(coord) and  self.game.board.notAWall(coord):
+                                neighbors.append(coord)
 
                     # add neighbors as successors
                     self.graph.addSuccTo((row, col), neighbors)
