@@ -8,64 +8,84 @@ from bot import Bot
 
 
 BOT_JACKY_NAME = 'Jacky'
+BOT_WILSON_NAME = 'Wilson'
 SCORE_BASE = 10
 SCORE_MINE = -10
 SCORE_DISTANCE = 1
 
+HERO_LIMIT_LIFE_PERIL = 42
 
-INTEREST_BASE = 100
-INTEREST_MINE = -100
-NON_INTEREST_MINE = 1000
-INTEREST_LOWER = -1
-INTEREST_MEDIUM = -10
-INTEREST_HIGH = -15
-INTEREST_VERY_HIGH = -20
-INTEREST_HIGHER = -25
-NON_INTEREST_HERO = 1000
-INTEREST_INN = -25
-NON_INTEREST_INN = 500
+
+INTEREST_MINE = 10
+NON_INTEREST_MINE = 100
+INTEREST_LOWER = 50
+INTEREST_MEDIUM = 20
+INTEREST_HIGH = 15
+INTEREST_VERY_HIGH = 10
+INTEREST_HIGHER = 7
+NON_INTEREST_HERO = 100
+INTEREST_INN = 10
+NON_INTEREST_INN = 100
 
 
 
 class JackyBot(Bot):
     """Our Bot !"""
 
-    def __init__(self):
+    def __init__(self, name = BOT_JACKY_NAME):
         """Jacky is creat !"""
         self.firstMove = True
         self.game = None # creat by Game class
         self.hero = None
+        self.name = name
 
     def move(self, state):
         """Call at each step of game. Must return a direction choose between ['Stay', 'North', 'South', 'East', 'West'] """
         # INIT
         self.game = Game(state)
-        self.hero = self.game.getHeroNamed(BOT_JACKY_NAME)
+        self.hero = self.game.getHeroNamed(self.name)
         if self.firstMove:
             self.creatGraph(self.game)
             self.firstMove = False
         #directions = ['Stay', 'North', 'South', 'East', 'West']
         # CHOOSE A DIRECTION
         finalPath = []
+        finalEvaluation = -1
         path = []
-        # Choix de cible -----> je suis français et je vous emmerde
-        if self.hero.life > 50:
+        targets = []
+        # définitions des cibles
+        # Tarvernes
+        if self.hero.life < HERO_LIMIT_LIFE_PERIL:
+            for tvrn in self.game.taverns_locs:
+                targets.append(tvrn)
 
-            for key in self.game.mines_locs.iterkeys():
-                idOwner = self.game.mines_locs[key]
-                if idOwner != self.hero.id:
-                    path = self.graph.Dijkstra(self.hero.pos, key)
-                    if len(finalPath) == 0 or len(path) < len(finalPath):
-                        finalPath = path
+        # Mines
+        for mine in self.game.mines_locs.iterkeys():
+            if self.game.mines_locs[mine] != self.hero.id:
+                targets.append(mine)
 
-        else:
-            for key in self.game.taverns_locs:
-                path = self.graph.Dijkstra(self.hero.pos, key)
-                if len(finalPath) == 0 or len(path) < len(finalPath):
-                    finalPath = path
+        # Heros
+        for hero in self.game.heroes:
+            if hero.id != self.hero.id:
+                targets.append(hero.pos)
+        # Choix de cible 
+        #print "targets: "+str(targets)
+        for target in targets:
+            #print self.hero.pos, target
+            path, evaluation = self.graph.Dijkstra(self.hero.pos, target)
+            # On garde le + petit
+            if finalEvaluation == -1 or evaluation < finalEvaluation:
+                finalPath = path
+                finalEvaluation = evaluation
+                #print finalPath
+        #print "\n\n\n"
+
+
         # Get direction of 2nd node in finalPath (2nd node = adjacent neighbor)
-        direction = self.directionOf(finalPath[1]) 
+        if len(finalPath) > 1:  direction = self.directionOf(finalPath[1]) 
+        else:                   direction = 'Stay'
         print self.hero
+        print "FINAL = "+str(finalPath)
         # RETURN
         return direction
 
@@ -108,33 +128,38 @@ class JackyBot(Bot):
         """Function that evaluate nodes of the graph. Wait a node.
         Seek if the node is a mine, a tavern, a hero or none. The more a node will give golds(or HP if in need), 
         the more interest will be set as a return of the function."""
+        ponderation = 0
+        coord = node
+        y, x = coord
+        node = self.game.board.tiles[y][x]
         # Si une mine nous appartient elle n'est pas intéressante
-        ponderation = INTEREST_BASE
-        # Si une mine nous appartient elle n'est pas intéressante
-        if isinstance(node, game.MineTile) and self.game.mines_locs[node] == self.hero.id:
-            ponderation += NON_INTEREST_MINE
-        # Si une mine ne nous appartient pas elle est intéressante
-        if isinstance(node, game.MineTile) and self.game.mines_locs[node] != self.hero.id:
-            ponderation += INTEREST_MINE
-        # Si le hero est plus faible que nous il est intéressant suivant son nombre de mine
-        if isinstance(node, game.HeroTile) and self.game.heroes_locs[node].life < self.hero.life:
-            nbMines = 0
-            for key in self.game.mines_locs.iterkeys():
-                if self.game.mines_locs[key] == self.game.heroes_locs[node]: nbMines += 1
-            if nbMines == 0: ponderation += INTEREST_LOWER
-            if nbMines == 1: ponderation += INTEREST_MEDIUM
-            if nbMines == 2: ponderation += INTEREST_HIGH
-            if nbMines == 3: ponderation += INTEREST_VERY_HIGH
-            if nbMines == 4: ponderation += INTEREST_HIGHER
-        # Si le hero est plus fort que nous c'est loin d'être une bonne idée d'aller lui dire bonjour
-        if isinstance(node, game.HeroTile) and self.game.heroes_locs[node].life >= self.hero.life:
-            ponderation += NON_INTEREST_HERO
+        if isinstance(node, game.MineTile):
+            if str(self.game.mines_locs[coord]) == self.hero.id:
+                ponderation = NON_INTEREST_MINE
+            else:
+                ponderation = INTEREST_MINE
         # Si nous ne sommes pas en péril la taverne n'est pas intéressante
-        if self.hero.life > 50 and node in self.game.taverns_locs:
-            ponderation += NON_INTEREST_INN
-        # Si nous sommes en péril la terverne prend des airs de paradis
-        if self.hero.life < 50 and node in self.game.taverns_locs:
-            ponderation += INTEREST_INN
+        elif node == game.TAVERN:
+            if self.hero.life > HERO_LIMIT_LIFE_PERIL:
+                ponderation = NON_INTEREST_INN
+                # Si nous sommes en péril la terverne prend des airs de paradis
+            else:
+                ponderation = INTEREST_INN
+        # Si le hero est plus faible que nous il est intéressant suivant son nombre de mine
+        elif isinstance(node, game.HeroTile):
+            idHero = self.game.heroes_locs[coord]
+            if self.game.getHeroWithId(idHero).life < self.hero.life:
+                nbMines = 0
+                for key in self.game.mines_locs.iterkeys():
+                    if self.game.mines_locs[key] == self.game.heroes_locs[coord]: nbMines += 1
+                if   nbMines == 0: ponderation = INTEREST_LOWER
+                elif nbMines == 1: ponderation = INTEREST_MEDIUM
+                elif nbMines == 2: ponderation = INTEREST_HIGH
+                elif nbMines == 3: ponderation = INTEREST_VERY_HIGH
+                elif nbMines >= 4: ponderation = INTEREST_HIGHER
+        # Si le hero est plus fort que nous c'est loin d'être une bonne idée d'aller lui dire bonjour
+            else:
+                ponderation = NON_INTEREST_HERO
         return ponderation
 
 

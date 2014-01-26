@@ -107,6 +107,7 @@ class Graph(object):
                 walkToNode = walked[minimalNode]
                 if walkToSucc == None    or    (walkToSucc > (walkToNode + distance)):
                     walked[successor] = walkToNode + distance
+                    #print "DISTANCE"+str(distance)
                     previous[successor] = minimalNode
 
         # Here, all nodes are founded
@@ -125,17 +126,22 @@ class Graph(object):
             path = [target] + path
             target = previous[target]
 
+        # DEBUG
+        if self.first:
+            #print "===================================="
+            #for node, dist in walked.iteritems():
+                #print str(node)+": "+str(dist)
+            #print "===================================="
+            self.first = False
+
         #Fin tant que
         #chemin.ajouterAvant(début)
-        path = [start] + path
         #Retourner chemin
-        if self.first:
-            print "===================================="
-            for node, dist in walked.iteritems():
-                print str(node)+": "+str(dist)
-            print "===================================="
-            self.first = False
-        return path
+        path = [start] + path
+        evaluation = walked[path[-1]]
+        #for node in path:
+            #evaluation += walked[node] + 1
+        return path, evaluation
     # END Dijkstra
 
 

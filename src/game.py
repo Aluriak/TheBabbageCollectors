@@ -51,6 +51,13 @@ class Game:
         return None
 
 
+    def getHeroWithId(self, idHero):
+        for hero in self.heroes:
+            if hero.id == idHero: 
+                return hero
+        return None
+
+
 
 class Board:
     def __parseTile(self, str):
@@ -115,7 +122,7 @@ class Hero:
         self.pos = (hero['pos']['x'], hero['pos']['y'])
         self.life = hero['life']
         self.gold = hero['gold']
-        self.id = hero['id']
+        self.id = str(hero['id'])
 
     def __str__(self):
         """format: 
