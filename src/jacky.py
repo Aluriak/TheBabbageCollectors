@@ -16,16 +16,16 @@ SCORE_DISTANCE = 1
 HERO_LIMIT_LIFE_PERIL = 42
 
 
-INTEREST_MINE = 50
-NON_INTEREST_MINE = 1000
-INTEREST_LOWER = 500
-INTEREST_MEDIUM = 200
-INTEREST_HIGH = 150
-INTEREST_VERY_HIGH = 100
-INTEREST_HIGHER = 70
-NON_INTEREST_HERO = 1000
+INTEREST_MINE = 500
+NON_INTEREST_MINE = 10000
+INTEREST_LOWER = 5000
+INTEREST_MEDIUM = 2000
+INTEREST_HIGH = 1500
+INTEREST_VERY_HIGH = 1000
+INTEREST_HIGHER = 700
+NON_INTEREST_HERO = 10000
 INTEREST_INN = 1
-NON_INTEREST_INN = 1000
+NON_INTEREST_INN = 10000
 
 
 
@@ -70,15 +70,13 @@ class JackyBot(Bot):
                 targets.append(hero.pos)
         # Choix de cible 
         #print "targets: "+str(targets)
-        for target in targets:
-            #print self.hero.pos, target
-            path, evaluation = self.graph.Dijkstra(self.hero.pos, target)
+        results = self.graph.Dijkstra(self.hero.pos, targets)
+        for result in results:
+            path, evaluation = result
             # On garde le + petit
             if finalEvaluation == -1 or evaluation < finalEvaluation:
                 finalPath = path
                 finalEvaluation = evaluation
-                #print finalPath
-        #print "\n\n\n"
 
 
         # Get direction of 2nd node in finalPath (2nd node = adjacent neighbor)
@@ -128,7 +126,7 @@ class JackyBot(Bot):
         """Function that evaluate nodes of the graph. Wait a node.
         Seek if the node is a mine, a tavern, a hero or none. The more a node will give golds(or HP if in need), 
         the more interest will be set as a return of the function."""
-        ponderation = 0
+        ponderation = 100
         coord = node
         y, x = coord
         node = self.game.board.tiles[y][x]
