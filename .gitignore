@@ -1,3 +1,4 @@
+src/playing
 *.pyc
 */*.pyc
 */*/*.pyc
