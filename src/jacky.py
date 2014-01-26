@@ -74,6 +74,7 @@ class JackyBot(Bot):
         results = self.graph.Dijkstra(self.hero.pos, targets)
         for result in results:
             path, evaluation = result
+            #print result # DEBUG
             # On garde le + petit
             if finalEvaluation == -1 or evaluation < finalEvaluation:
                 finalPath = path
@@ -81,8 +82,12 @@ class JackyBot(Bot):
 
 
         # Get direction of 2nd node in finalPath (2nd node = adjacent neighbor)
-        if len(finalPath) > 1:  direction = self.directionOf(finalPath[1]) 
-        else:                   direction = 'Stay'
+        if len(finalPath) > 1:  
+            direction = self.directionOf(finalPath[1]) 
+            print direction
+        else:                 
+            print "STAYING... ?"
+            direction = 'Stay'
         print self.hero
         print "FINAL = "+str(finalPath)
         # RETURN
