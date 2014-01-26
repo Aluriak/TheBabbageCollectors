@@ -100,7 +100,7 @@ class JackyBot(Bot):
             nbMines = 0
             for key in self.game.mines_locs.iterkeys():
                 if self.game.mines_locs[key] == self.game.heroes_locs[node]: nbMines += 1
-            if nbMibes == 0: ponderation = 25
+            if nbMines == 0: ponderation = 25
             if nbMines == 1: ponderation = -10
             if nbMines == 2: ponderation = -15
             if nbMines == 3: ponderation = -20
