@@ -46,42 +46,6 @@ class Graph(object):
 
 
 
-
-
-
-    #def shortestPath(self, start, end, path=[]):
-        #"""Return list of nodes, included begin and end node. This list is the shortest path founded in graph"""
-        ## if its the first recursive call, creat a marked dict
-        #if len(path) == 0:
-            #self.marked = {}
-            #for key in self.nodes.iterkeys():
-                #self.marked[key] = False
-        #path = path + [start]
-                            
-        #if start == end:
-            #return path
-        #if self.first:
-            #self.first = False
-        #if not self.nodes.has_key(start):
-            #return None
-        #shortest = None
-        #for node in self.nodes[start]:
-            #if node not in path and not self.marked[node]:
-                #self.marked[node] = True
-                #newpath = self.shortestPath(node, end, path)
-                #if newpath != None:
-                    #if shortest == None or len(newpath) < len(shortest):
-                        #shortest = newpath
-        #return shortest
-
-
-
-
-    def BFS(self, start, end, path=[]):
-        """BFS algorithm"""
-        queue = Queue()
-
-
 #Fonction Dijkstra (firstNode, target)
     def Dijkstra(self, start, end):
         """Dijkstra. Return path to end"""
@@ -189,7 +153,8 @@ class Graph(object):
 
 
     def distanceBetween(self, node1, node2):
-        return self.distanceBetweenTwoNodes
+       """Wait two nodes. Return the minimum distance between these two nodes"""
+       return self.distanceBetweenTwoNodes
 
 
 
