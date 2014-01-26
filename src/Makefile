@@ -1,4 +1,4 @@
 NB_TURN=50
 
 training:
-	python client.py clef training $(NB_TURN)
+	python client.py zi05ue57 training $(NB_TURN)
