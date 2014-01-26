@@ -91,7 +91,6 @@ class Graph(object):
         #fd.close()
 
 
-        # Pour n parcourant noeuds
         # for each node of graph
         walked = {}
         previous = {}
@@ -99,16 +98,13 @@ class Graph(object):
             walked[key] = None # infinity
             previous[key] = None
             
-        #Fin pour
-        #début.parcouru = 0
-        #pasEncoreVu = noeuds
+        # init walking dict and notFoundYet list
         walked[start] = 0
         notFoundYet = []
         for key in self.nodes.iterkeys():
             notFoundYet.append(key)
 
-        #Tant que pasEncoreVu != liste vide
-        #    n1 = minimum(pasEncoreVu)   // Le nœud dans pasEncoreVu avec parcouru le plus petit
+        # while there is nodes not found
         while len(notFoundYet) > 0:
             minimalNode = self.nodeAtMinimumDistance(notFoundYet, walked)
             #print "MINIMAL NODE POPPED: "+str(minimalNode)
